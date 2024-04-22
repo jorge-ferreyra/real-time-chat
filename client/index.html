@@ -4,6 +4,24 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Real time chat</title>
+
+  <script type="module">
+    import { io } from 'https://cdn.socket.io/4.3.2/socket.io.esm.min.js'
+
+    const socket = io()
+
+    const form = document.getElementById('form')
+    const input = document.getElementById('input')
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault()
+      if(input.value) {
+        socket.emit('chat message', input.value)
+        input.value = ''
+      }
+    })
+  </script>
+
   <style>
     *, *::before, *::after {
       box-sizing: border-box;
@@ -33,22 +51,38 @@
     }
 
     #form {
+      width: 100%;
+      height: fit-content;
       padding: 10px;
       display: flex;
       gap: 10px;
       align-items: center;
-      position: relative;
+      position: absolute;
+      bottom: 0;
     }
 
-    #message {
+    #input {
+      height: 30px;
       flex-grow: 2;
+    }
+
+    #input:focus {
+      outline: 0;
+    }
+
+    #form > button {
+      height: 30px;
+      background: #09f;
+      border: 0;
+      padding: 6px;
+      border-radius: 4px;
     }
   </style>
 </head>
 <body>
   <section id="chat">
     <form id="form" action="">
-      <input type="text" name="message" id="message" placeholder="Type a message" autocomplete="off">
+      <input type="text" name="message" id="input" placeholder="Type a message" autocomplete="off">
       <button type="submit">Send</button>
     </form>
   </section>
