@@ -25,20 +25,27 @@
     const socket = io({
       auth: {
         username: await getUsername(),
-        serverOffset: 0
+        serverOffset: 0,
+        timestamp: Date.now()
       }
     })
+
 
     const form = document.getElementById('form')
     const input = document.getElementById('input')
     const messages = document.getElementById('messages')
 
 
-    socket.on('chat message', (msg, serverOffset, username) => {
+    socket.on('chat message', (msg, serverOffset, username, timestamp) => {
+      const date = new Date(timestamp)
+      const hours = date.getHours()
+      const minutes = date.getMinutes()
+      const formattedTime = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`
       const item = `
         <li class='message'>
-          <p>${msg}</p>
           <small>${username}</small>
+          <p>${msg}</p>
+          <p>${formattedTime}</p>
         </li>`
       messages.insertAdjacentHTML('beforeend', item)
       socket.auth.serverOffset = serverOffset
@@ -50,7 +57,8 @@
       event.preventDefault()
 
       if(input.value) {
-        socket.emit('chat message', input.value)
+        console.log(Date.now())
+        socket.emit('chat message', input.value, Date.now())
         input.value = ''
       }
 
@@ -130,6 +138,8 @@
       width: 100%;
       border: 1px solid #09f;
       padding: 10px;
+      display: flex;
+      flex-direction: column;
     }
 
   </style>
