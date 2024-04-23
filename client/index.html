@@ -46,8 +46,8 @@
           <small>${username}</small>
           <div class='main-content-message'>
             <p>${msg}</p>
-            <soan>${formattedTime}</span>
-          <div>
+            <span>${formattedTime}</span>
+          </div>
         </li>`
       messages.insertAdjacentHTML('beforeend', item)
       socket.auth.serverOffset = serverOffset
@@ -139,8 +139,12 @@
     }
 
     .message {
-      width: 100%;
+      max-width: 300px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
       border: 1px solid #09f;
+      border-radius: 4px;
       padding: 8px;
       display: flex;
       flex-direction: column;
@@ -159,8 +163,10 @@
 
     .main-content-message {
       width: 100%;
+      height: fit-content;
       display: flex;
       justify-content: space-between;
+      align-items: flex-end;
     }
 
   </style>
